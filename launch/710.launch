@@ -1,0 +1,15 @@
+<!-- -*- mode: XML -*- -->
+<launch>
+
+  <node name="dcam710_publisher" pkg="picozense_ros" type="dcam710_publisher" output="screen"></node>
+
+  <node pkg="nodelet" type="nodelet" args="manager" name="pico_nodelet_manager" output="screen"/>
+
+  <node pkg="nodelet" type="nodelet" name="cloudify" args="load depth_image_proc/point_cloud_xyz pico_nodelet_manager --no-bond"> -->
+    <remap from="image_rect" to="pico/depth/image_raw"/>
+    <remap from="camera_info" to="pico/depth/camera_info"/>
+    <remap from="points" to="pico/depth/points"/>
+  </node>
+
+
+</launch>
