@@ -147,6 +147,10 @@ int main(int argc, char** argv) {
   // PsNearRange, PsMidRange, PsFarRange
   status = PsSetDepthRange(deviceIndex, PsMidRange);
   ROS_INFO_STREAM( "Set depth range status: " << status);
+  
+  uint16_t pPulseCount;
+  status = PsGetPulseCount(deviceIndex, &pPulseCount);
+  ROS_INFO_STREAM("Get pulse count: " << status << " pulse count: " << pPulseCount);
 
   status = PsOpenDevice(deviceIndex);
 
@@ -204,7 +208,7 @@ int main(int argc, char** argv) {
 
   //creating a camera info message to be published
   PicofillCamInfo(deviceIndex, pico_cam_info_msg_);
-  transform.setOrigin( tf::Vector3(0, -0.05, 0) );
+  transform.setOrigin( tf::Vector3(0.03, -0.06, -0.015) );
   q.setRPY(0, 0, 0);
   transform.setRotation(q);
 
