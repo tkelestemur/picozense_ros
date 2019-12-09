@@ -69,11 +69,13 @@ void PicofillCamInfo(int _deviceIndex, sensor_msgs::CameraInfoPtr pico_cam_info_
   status = PsGetCameraParameters(_deviceIndex, PsSensorType::PsDepthSensor, &params);
 
   pico_cam_info_msg->D.resize(5);
+//  pico_cam_info_msg->D = {0.0};
   pico_cam_info_msg->D[0] = params.k1;   // k1
   pico_cam_info_msg->D[1] = params.k2;   // k2
-  pico_cam_info_msg->D[2] = params.k3;   // k3
-  pico_cam_info_msg->D[3] = params.p1;   // p1
-  pico_cam_info_msg->D[4] = params.p2;   // p2
+  pico_cam_info_msg->D[2] = params.p1;   // k3
+  pico_cam_info_msg->D[3] = params.p2;   // p1
+  pico_cam_info_msg->D[4] = params.k3;   // p2
+  //pico_cam_info_msg->D[5] = params.
 
   pico_cam_info_msg->K.fill(0.0);
   pico_cam_info_msg->K[0] = params.fx;
@@ -148,9 +150,12 @@ int main(int argc, char** argv) {
   status = PsSetDepthRange(deviceIndex, PsMidRange);
   ROS_INFO_STREAM( "Set depth range status: " << status);
   
-  uint16_t pPulseCount;
-  status = PsGetPulseCount(deviceIndex, &pPulseCount);
-  ROS_INFO_STREAM("Get pulse count: " << status << " pulse count: " << pPulseCount);
+//  status = PsSetDepthDistortionCorrectionEnabled(deviceIndex, false);
+ 
+  // uint16_t pPulseCount = 4000;
+  // status = PsSetPulseCount(deviceIndex, pPulseCount);
+  // status = PsGetPulseCount(deviceIndex, p
+ //  ROS_INFO_STREAM("Get pulse count: " << status << " pulse count: " << pPulseCount);
 
   status = PsOpenDevice(deviceIndex);
 
@@ -208,7 +213,7 @@ int main(int argc, char** argv) {
 
   //creating a camera info message to be published
   PicofillCamInfo(deviceIndex, pico_cam_info_msg_);
-  transform.setOrigin( tf::Vector3(0.03, -0.06, -0.015) );
+  transform.setOrigin( tf::Vector3(0.02, -0.06, -0.015) );
   q.setRPY(0, 0, 0);
   transform.setRotation(q);
 
