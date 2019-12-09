@@ -233,9 +233,12 @@ int main(int argc, char** argv) {
       mDispImg = cv::Mat(depthFrameMode.resolutionHeight, depthFrameMode.resolutionWidth, CV_16UC1, depthFrame.pFrameData);
     }
 
+    cv::Mat mDispImgFiltered;
+    cv::medianBlur(mDispImg, mDispImgFiltered, 5);
+
     ros::Time present_time = ros::Time::now();
 
-    sensor_msgs::ImagePtr msg = imageToROSmsg(mDispImg, "16UC1", "pico_depth_frame" , present_time, counter);
+    sensor_msgs::ImagePtr msg = imageToROSmsg(mDispImgFiltered, "16UC1", "pico_depth_frame" , present_time, counter);
     br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "head_rgbd_sensor_rgb_frame", msg->header.frame_id));
     counter++;
 
